@@ -17,9 +17,4 @@
 
 ##### This phase
 
-- [ ] Integrate with JWT to manage tasks only if logged in
-
-
-##### Next phase
-
 - [ ] Integrate Users authentication (JWT) for Tasks management;
