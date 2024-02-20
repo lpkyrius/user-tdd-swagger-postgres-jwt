@@ -1,0 +1,11 @@
+.vscode
+**/.DS_Store
+node_modules
+tasks.log
+# ToDo.md
+# docker-compose.yml
+# docker-image.yml
+
+# --- only in this case, let's not ignore .env ---
+.env
+.env.*
