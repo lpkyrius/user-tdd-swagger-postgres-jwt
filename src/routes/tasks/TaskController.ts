@@ -93,7 +93,6 @@ class TaskController {
 
   checkUserId(userId: string) {
     try {
-      console.log('debug task/list', userId)
       // Size between 3 to 100
       const PWD_REGEX = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
       if (!userId)

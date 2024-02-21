@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev --exit-child src/server.ts",
     "start-nodemon": "nodemon src/server.ts",
-    "test": "npx jest --watch --config jest.config.ts",
+    "test": "npx jest --detectOpenHandles --watch --config jest.config.ts",
+    "test-verbose": "npx jest --verbose --detectOpenHandles --watch --config jest.config.ts",
     "test:cov": "npx jest --config jest.config.ts --coverage"
   },
   "keywords": [],

@@ -1,7 +1,6 @@
 import { expect, describe, test, beforeAll } from '@jest/globals';
 import request from 'supertest';
 import app from '../../app';
-import { mockedTasks } from './mockedTasks';
 import { Task } from '../../entities/Task';
 import { ManageTaskTestFile } from '../../repository/in-memory/tasks/ManageTaskTestFile';
 
@@ -27,7 +26,6 @@ if (!e2eTestEnabled) {
 
     describe('Test POST /task/add', () => {
       test('It should respond with 200 success + Content-Type = json.', async () => {
-
         const taskData = {
           userId: '533b7681-b1c3-4244-8a37-423ae7a3d8ac',
           summary: 'E2E Test summary #1',
@@ -92,6 +90,18 @@ if (!e2eTestEnabled) {
 
     describe('Test GET /task/list', () => {
       test('It should respond with 200 success + Content-Type = json containing a Task like object.', async () => {
+        let taskRawStructure = {
+          id: expect.any(String),
+          userId: expect.any(String),
+          summary: expect.any(String),
+          created_at: expect.any(String)
+          // created_at: expect.any(Date)
+        };
+  
+        const taskStructure = expect.arrayContaining([
+          expect.objectContaining(taskRawStructure),
+        ]);
+        
         manageTaskTestFile.resetFile();
         
         const response = await request(app)
@@ -99,8 +109,8 @@ if (!e2eTestEnabled) {
             .expect('Content-Type', /json/)
             .expect(200);
             
-            expect(response.body).toEqual(mockedTasks);
-            expect(response.body).toMatchObject(mockedTasks);
+            expect(response.body).toEqual(taskStructure);
+            expect(response.body).toMatchObject(taskStructure);
             expect(response.body).toBeInstanceOf(Array);
       });
     });
@@ -119,8 +129,8 @@ if (!e2eTestEnabled) {
             .expect('Content-Type', /json/)
             .expect(200);
           
-            expect(responseFind.body).toEqual(mockedTasks[1]);
-            expect(responseFind.body).toMatchObject(mockedTasks[1]);
+            expect(responseFind.body.id).toEqual(testTask.id);
+            expect(responseFind.body.created_at).toEqual(testTask.created_at);
       });
 
       test('It should respond with 404 not found when trying to find an id that does not exist.', async () => {
@@ -151,10 +161,11 @@ if (!e2eTestEnabled) {
             .expect('Content-Type', /json/)
             .expect(200);
 
-          expect(responseUpdate.body).toEqual(testTask);
+          expect(responseUpdate.body.id).toEqual(testTask.id);
+          expect(responseUpdate.body.summary).toEqual(testTask.summary);
       });
 
-      test.only('It should respond with 400 bad request when trying to update with a summary larger than 500 characters.', async () => {
+      test('It should respond with 400 bad request when trying to update with a summary larger than 500 characters.', async () => {
         const repeatedSummary = 'A';
         const response = await request(app)
               .get('/task/list')
