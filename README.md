@@ -2,15 +2,24 @@
 #### Factory-Dependency-Injection-UnitTests-E2ETests
 
 ## Skeleton
-- TDD
-- Typescript
+- Project structure
 - OOP
-- Factory 
-- Dependency Injection
-- Unit Tests 
-- E2E Tests
-- Database in-memory
-- Swagger API Docs
+- TDD
+- Task entity
+- In-Memory repository
+- Unit tests
+- E2E tests
+- Swagger API Docs.
+- User entity
+- Persist data with Postgres
+- Migrations;
+- Factory for dependency injection;
+
+
+##### Work in progress:
+
+- [ ] Integrate Users authentication (JWT) for Tasks management;
+
 
 ### Tests:
 

@@ -3,18 +3,22 @@
 ##### predefined
 
 - [x] Project structure
+- [x] OOP
 - [x] TDD
-- [x] Task class
+- [x] Task entity
 - [x] In-Memory repository
 - [x] Unit tests
 - [x] E2E tests
 - [x] Swagger API Docs.
-- [x] User class (not integrated yet)
-- [x] Persist data with MySQL
-- [x] Knex migrations;
-- [x] Factory following the new persist repository;
+- [x] User entity
+- [x] Persist data with Postgres
+- [x] Migrations;
+- [x] Factory for dependency injection;
 
 
 ##### This phase
 
 - [ ] Integrate Users authentication (JWT) for Tasks management;
+    - [x] VerifyJWT middleware
+    - [ ] New structure for user + login data (persist token)
+    - [ ] Update Routes
