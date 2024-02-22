@@ -4,6 +4,8 @@
  */
 
 // npx knex --knexfile ./db/knexfile.cjs migrate:make login_table
+// npx knex --knexfile ./db/knexfile.cjs migrate:rollback
+// npx knex --knexfile ./db/knexfile.cjs migrate:latest
 
 exports.up = function(knex) {
     return knex.schema
