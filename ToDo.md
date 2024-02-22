@@ -22,3 +22,8 @@
     - [x] VerifyJWT middleware
     - [ ] New structure for user + login data (persist token)
     - [ ] Update Routes
+
+
+##### Next phase
+
+- [ ] Improve tasks management with specific role permissions
