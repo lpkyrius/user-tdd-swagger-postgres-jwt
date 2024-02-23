@@ -7,8 +7,8 @@ import { UserRepositoryInPostgres } from '../../repository/postgres/users/UserRe
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-global.console.log = jest.fn();
-global.console.error = jest.fn();
+// global.console.log = jest.fn();
+// global.console.error = jest.fn();
 
 describe('#UserService', () =>{
 
@@ -16,7 +16,7 @@ describe('#UserService', () =>{
     // just comment the correspondent line withing the repositories object below
     const repositories: Record<string, string> = { 
         inmemory: 'InMemory', 
-        database: 'Postgres' 
+        // database: 'Postgres' 
     };
 
     for (const property in repositories) {

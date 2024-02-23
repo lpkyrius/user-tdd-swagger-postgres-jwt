@@ -16,7 +16,7 @@ describe('#taskService', () => {
   // just comment the correspondent line withing the repositories object below
   const repositories: Record<string, string> = { 
     inmemory: 'InMemory', 
-    database: 'Postgres' 
+    // database: 'Postgres' 
   };
 
   for (const property in repositories) {

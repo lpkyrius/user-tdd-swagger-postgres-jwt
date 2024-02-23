@@ -3,14 +3,18 @@ import * as fs from 'fs';
 import { User } from '../../../entities/User';
 import { IUserRepository } from '../../IUserRepository';
 import { ManageUserTestFile } from './ManageUserTestFile';
-
+import { ManageLoginTestFile } from './ManageLoginTestFile';
 class UserRepositoryInMemory implements IUserRepository {
 
-    private readonly filePath: string;
+    private readonly userFilePath: string;
+    private readonly loginFilePath: string;
 
     constructor() {
         const manageUserTestFile = new ManageUserTestFile();
-        this.filePath = manageUserTestFile.getFile();
+        this.userFilePath = manageUserTestFile.getFile();
+
+        const manageLoginTestFile = new ManageLoginTestFile();
+        this.loginFilePath = manageLoginTestFile.getFile();
     }
 
     async add(user: User): Promise<User> {
@@ -80,12 +84,45 @@ class UserRepositoryInMemory implements IUserRepository {
     }
 
     private readUsersFromFile(): User[] {
-        const fileData = fs.readFileSync(this.filePath, 'utf-8');
-        return JSON.parse(fileData);
+        const userFileData:User[] = JSON.parse(fs.readFileSync(this.userFilePath, 'utf-8'));
+        const loginFileData:User[] = JSON.parse(fs.readFileSync(this.loginFilePath, 'utf-8'));
+        const completeUserData = userFileData.map(user => {
+            const loginInfo = loginFileData.find(login => login.email === user.email);
+            return {
+              id: user.id!,
+              email: user.email!,
+              role: user.role!,
+              created_at: user.created_at,
+              password: loginInfo ? loginInfo.password : '' // Add password field from loginFileData
+            };
+          });
+
+        return completeUserData;
     }
 
     private writeUsersToFile(users: User[]): void {
-        fs.writeFileSync(this.filePath, JSON.stringify(users, null, 2));
+        // split the data to each specific file
+        const usersArray = [];
+        const loginsArray = [];
+        users.forEach(usr => {
+            usersArray.push(
+                { 
+                    id: usr.id,
+                    email: usr.email,
+                    role: usr.role,
+                    created_at: usr.created_at
+                }
+            );
+            loginsArray.push(
+                { 
+                    id: crypto.randomUUID(),
+                    email: usr.email,
+                    password: usr.password,
+                }
+            );
+        });
+
+        fs.writeFileSync(this.userFilePath, JSON.stringify(users, null, 2));
     }
 
 }
