@@ -52,11 +52,11 @@ class UserController {
       if (!id)
         return res.status(400).json({ error: 'invalid id' });
 
-      const taskFound = await this.userService.findById(id);
-      if (taskFound)
-        return res.status(200).json(taskFound);
+      const userFound = await this.userService.findById(id);
+      if (userFound)
+        return res.status(200).json(userFound);
 
-      return res.status(200).json(await this.userService.findById(id));
+        return res.status(404).json({ error: 'user not found' });
     } catch (error: any) {
       if (error.message.includes('id not found')) 
         return res.status(404).json({ error: 'user not found' });

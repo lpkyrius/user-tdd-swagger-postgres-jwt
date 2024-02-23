@@ -4,8 +4,8 @@ import { UserRepositoryInMemory } from "../repository/in-memory/users/UserReposi
 import { UserRepositoryInPostgres } from "../repository/postgres/users/UserRepositoryInPostgres";
 export default class UserFactory {
   static async createInstance() {
-    // const userRepository = new UserRepositoryInMemory();
-    const userRepository = new UserRepositoryInPostgres();
+    const userRepository = new UserRepositoryInMemory();
+    // const userRepository = new UserRepositoryInPostgres();
     const userService = new UserService(userRepository);
     const userController = new UserController(userService);
   

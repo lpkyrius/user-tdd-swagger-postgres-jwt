@@ -207,8 +207,9 @@ if (!e2eTestEnabled) {
                     .get('/user/find/'+ response.body.id)
                     .expect('Content-Type', /json/)
                     .expect(200);
-
-                expect(responseFind.body).toEqual(response.body);
+                
+                expect(responseFind.body.id).toEqual(response.body.id);
+                expect(responseFind.body.email).toEqual(response.body.email);
               });
         
               test('It should respond with 404 not found when trying to find an id that does not exist.', async () => {

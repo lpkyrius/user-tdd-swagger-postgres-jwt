@@ -33,11 +33,8 @@ class UserService {
         let loginSuccess: boolean = false;
         const user = await this.userRepository.findUserByEmail(email)
         if (user){
-            
             const crypto = new Cryptography();
-            // console.log('debug email, password, loginSuccess, user', email, password, loginSuccess, user)
             loginSuccess = await crypto.decrypt(password, user.password);
-            // console.log('debug email, password, loginSuccess', email, password, loginSuccess)
         }
 
         return loginSuccess;
