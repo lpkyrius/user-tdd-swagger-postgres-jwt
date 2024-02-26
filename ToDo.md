@@ -27,3 +27,4 @@
 ##### Next phase
 
 - [ ] Improve tasks management with specific role permissions
+- [ ] Logging 
