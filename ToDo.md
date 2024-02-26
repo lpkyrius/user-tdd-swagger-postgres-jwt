@@ -20,7 +20,8 @@
 
 - [ ] Integrate Users authentication (JWT) for Tasks management;
     - [x] VerifyJWT middleware
-    - [ ] New structure for user + login data (persist token)
+    - [x] New structure for user + login data (persist token)
+    - [ ] Refresh token management
     - [ ] Update Routes
 
 
