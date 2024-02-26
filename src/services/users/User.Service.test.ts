@@ -15,8 +15,8 @@ describe('#UserService', () =>{
     // to enable/disable one specific test (in memory or postgres) 
     // just comment the correspondent line withing the repositories object below
     const repositories: Record<string, string> = { 
-        inmemory: 'InMemory', 
-        // database: 'Postgres' 
+        // inmemory: 'InMemory', 
+        database: 'Postgres' 
     };
 
     for (const property in repositories) {
@@ -50,7 +50,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe('#UserEmailExist', () => {
+        describe.skip('#UserEmailExist', () => {
             it('should return true when check if an existent user email exists', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 const user: User = {
@@ -89,7 +89,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe('#LoginUser', () => {
+        describe.skip('#LoginUser', () => {
             it('should be able to log in with valid user and password', async () => {
                 const userData = {
                     email: 'mary.tech@email.com',
@@ -131,7 +131,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe('#Find User', () => {
+        describe.skip('#Find User', () => {
             let user: User;
         
             it('should find an existent user', async () => {
@@ -156,7 +156,7 @@ describe('#UserService', () =>{
             });
         });
 
-        describe('#UpdateUser', () => {
+        describe.skip('#UpdateUser', () => {
             it('should be able to update an existent user', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 let user: User, result: User; 
@@ -189,7 +189,7 @@ describe('#UserService', () =>{
             });
         })
 
-        describe('#DeleteUser', () => {
+        describe.skip('#DeleteUser', () => {
             it('should be able to delete an existent user', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 const userData = {

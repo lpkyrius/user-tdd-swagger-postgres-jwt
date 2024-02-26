@@ -2,39 +2,39 @@ import crypto from 'crypto';
 import { User } from '../../../entities/User';
 import { IUserRepository } from "../../IUserRepository";
 import { db } from '../../../services/postgres/postgres';
-
-
-
-import * as fs from 'fs';
+import { QueryBuilder } from 'knex';
 import { ManageUserTestFile } from '../../in-memory/users/ManageUserTestFile';
-
 
 class UserRepositoryInPostgres implements IUserRepository {
   private readonly filePath: string;
-
+  
   constructor() {
       const manageUserTestFile = new ManageUserTestFile();
       this.filePath = manageUserTestFile.getFile();
   }
+
   async add(user: User): Promise<User> {
-    try {
-      const newUser: User = { ...user, id: crypto.randomUUID(), created_at: new Date(new Date().toISOString()) };
-      const savedUser = await db('users')
-          .insert({
-            id: newUser.id,
-            email: newUser.email,
-            password: newUser.password,
-            role: newUser.role,
-            created_at: newUser.created_at 
-          })
-          .returning('*');
-          
-      return savedUser[0];  
-            
-    } catch (error) {
-        console.log(`Error in add User(): ${error}`);
-        throw error;
-    }
+      try {
+          const newUser: User = { ...user, id: crypto.randomUUID(), created_at: new Date(new Date().toISOString()) };
+          const savedUser = await db.transaction(async (createdTransaction: any) => {
+              const insertedUser: User = await createdTransaction('users')
+                  .insert({
+                      id: newUser.id,
+                      email: newUser.email,
+                      role: newUser.role,
+                      created_at: newUser.created_at
+                  }).returning('*').then((rows: User[]) => rows[0]);
+
+              await createdTransaction('login').insert({ id: crypto.randomUUID(), password: newUser.password, email: newUser.email });
+
+              return insertedUser;
+          });
+
+          return savedUser;
+      } catch (error) {
+          console.log(`Error in add User(): ${error}`);
+          throw error;
+      }
   }
 
   async findUserByEmail(email: string): Promise<User> {
