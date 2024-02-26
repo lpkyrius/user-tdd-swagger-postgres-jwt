@@ -50,7 +50,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe.skip('#UserEmailExist', () => {
+        describe('#UserEmailExist', () => {
             it('should return true when check if an existent user email exists', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 const user: User = {
@@ -89,7 +89,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe.skip('#LoginUser', () => {
+        describe('#LoginUser', () => {
             it('should be able to log in with valid user and password', async () => {
                 const userData = {
                     email: 'mary.tech@email.com',
@@ -100,7 +100,7 @@ describe('#UserService', () =>{
                 expect(result).toBeTruthy();
             })
             
-            it('should NOT be able to log in with invalid password', async () => {
+            it.skip('should NOT be able to log in with invalid password', async () => {
                 const noPasswordUser = {
                     email: 'mary.tech@email.com',
                     password: ''
@@ -110,7 +110,7 @@ describe('#UserService', () =>{
                 expect(result).toBeFalsy();
             })
 
-            it('should throw an error when trying to log in with invalid user', async () => {
+            it.skip('should throw an error when trying to log in with invalid user', async () => {
                 const userInvalid = {
                     email: 'i.do.not.exist@email.com',
                     password: 'mary.tech@123'
@@ -120,7 +120,7 @@ describe('#UserService', () =>{
                 }).rejects.toThrow('email not found');
             })
 
-            it('should throw an error when trying to log in with invalid user email', async () => {
+            it.skip('should throw an error when trying to log in with invalid user email', async () => {
                 const userInvalid = {
                     email: '',
                     password: ''

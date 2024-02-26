@@ -40,16 +40,17 @@ class UserRepositoryInPostgres implements IUserRepository {
   async findUserByEmail(email: string): Promise<User> {
     try {
       const recoveredData = await db('users')
-          .select('*')
+          .select('users.*', 'login.password as password')
           .from('users')
-          .where({ email })
+          .leftJoin('login', 'users.email', 'login.email')
+          .where({ 'users.email': email });
 
       if (recoveredData.length)
         return recoveredData[0];
 
       throw new Error('email not found');
     } catch (error) {
-        console.log(`Error in findUserByEmail(): ${ error }`)
+        console.log(`Error in findUserByEmail(): ${error}`)
         throw error;
     }
   }
