@@ -7,15 +7,15 @@ import { UserRepositoryInPostgres } from '../../repository/postgres/users/UserRe
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-// global.console.log = jest.fn();
-// global.console.error = jest.fn();
+global.console.log = jest.fn();
+global.console.error = jest.fn();
 
 describe('#UserService', () =>{
 
     // to enable/disable one specific test (in memory or postgres) 
     // just comment the correspondent line withing the repositories object below
     const repositories: Record<string, string> = { 
-        // inmemory: 'InMemory', 
+        inmemory: 'InMemory', 
         database: 'Postgres' 
     };
 
@@ -100,7 +100,7 @@ describe('#UserService', () =>{
                 expect(result).toBeTruthy();
             })
             
-            it.skip('should NOT be able to log in with invalid password', async () => {
+            it('should NOT be able to log in with invalid password', async () => {
                 const noPasswordUser = {
                     email: 'mary.tech@email.com',
                     password: ''
@@ -110,7 +110,7 @@ describe('#UserService', () =>{
                 expect(result).toBeFalsy();
             })
 
-            it.skip('should throw an error when trying to log in with invalid user', async () => {
+            it('should throw an error when trying to log in with invalid user', async () => {
                 const userInvalid = {
                     email: 'i.do.not.exist@email.com',
                     password: 'mary.tech@123'
@@ -120,7 +120,7 @@ describe('#UserService', () =>{
                 }).rejects.toThrow('email not found');
             })
 
-            it.skip('should throw an error when trying to log in with invalid user email', async () => {
+            it('should throw an error when trying to log in with invalid user email', async () => {
                 const userInvalid = {
                     email: '',
                     password: ''
@@ -131,7 +131,7 @@ describe('#UserService', () =>{
             })
         })
 
-        describe.skip('#Find User', () => {
+        describe('#Find User', () => {
             let user: User;
         
             it('should find an existent user', async () => {
@@ -156,8 +156,8 @@ describe('#UserService', () =>{
             });
         });
 
-        describe.skip('#UpdateUser', () => {
-            it('should be able to update an existent user', async () => {
+        describe('#UpdateUser', () => {
+            it('should be able to update the role from an existent user', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 let user: User, result: User; 
                 const userData = {
@@ -169,11 +169,11 @@ describe('#UserService', () =>{
                 user = await userService.add(userData);
 
                 let updatedUser: User = Object.assign({}, user);
-                updatedUser.email = `user.updated.manager.${ randomString }@email.com`;
+                updatedUser.role = '2';
 
                 result = await userService.update(updatedUser);
 
-                expect(result.email).toBe(updatedUser.email);
+                expect(result.role).toBe(updatedUser.role);
             })
 
             it('should throw an error when updating a non-existing user on UserService', async () => {
@@ -189,34 +189,6 @@ describe('#UserService', () =>{
             });
         })
 
-        describe.skip('#DeleteUser', () => {
-            it('should be able to delete an existent user', async () => {
-                const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
-                const userData = {
-                    email: `user.to.delete.manager.${ randomString }@email.com`,
-                    password: `user.to.delete.manager.${ randomString }@123`,
-                    role: '1',
-                };
-            
-                const user: User = await userService.add(userData);
-                const existNewUser: boolean = await userService.exist(user.id!);
-        
-                const userDeleted = await userService.delete(user.id!);
-                const existAfterDelete: boolean = await userService.exist(user.id!);
-        
-                expect(userDeleted).toBeTruthy;
-                expect(existNewUser).toBe(true);
-                expect(existAfterDelete).toBe(false);
-            });
-            
-            it('should return false when deleting a non-existing user on UserService', async () => {
-                const testDel = async function () {
-                    return await userService.delete('this.id.should.not.exist');
-                }
-                expect(await testDel()).toBeFalsy();
-            });
-            
-        });
     }
 
 });

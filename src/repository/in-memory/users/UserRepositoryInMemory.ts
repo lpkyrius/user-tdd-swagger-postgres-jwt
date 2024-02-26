@@ -47,17 +47,6 @@ class UserRepositoryInMemory implements IUserRepository {
         throw new Error('user not found');
     }
 
-    async delete(id: string): Promise<boolean> {
-        const users = this.readUsersFromFile();
-        const initialLength = users.length;
-        const filteredUsers = users.filter((u) => u.id !== id);
-        if (filteredUsers.length !== initialLength) {
-            this.writeUsersToFile(filteredUsers);
-            return true;
-        }
-        return false;
-    }
-
     async exists(id: string): Promise<boolean> {
         const users = this.readUsersFromFile();
         

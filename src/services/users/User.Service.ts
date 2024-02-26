@@ -44,10 +44,6 @@ class UserService {
         return await this.userRepository.update(userToUpdate);
     }
 
-    async delete(id: string): Promise<boolean> {
-        return await this.userRepository.delete(id);
-    }
-
     async findById(id: string): Promise<User> {
         return await this.userRepository.findUserById(id);
     }

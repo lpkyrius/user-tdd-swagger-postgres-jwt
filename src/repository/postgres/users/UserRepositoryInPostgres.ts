@@ -57,11 +57,10 @@ class UserRepositoryInPostgres implements IUserRepository {
 
   async update(user: User): Promise<User> {
     try {
-      const { email, role } = user
+      const { role } = user
       const updatedUser = await db('users')
         .where('id', '=', user.id)
         .update({
-            email,
             role
           })
         .returning('*');
@@ -70,26 +69,8 @@ class UserRepositoryInPostgres implements IUserRepository {
         throw new Error('user not found');
 
       return updatedUser[0];
-  } catch (error) {
-      console.log(`Error in update user(): ${ error }`);
-      throw error;
-  }
-  }
-
-  async delete(id: string): Promise<boolean> {
-    try {
-
-      const deletedTokenData = await db('users')
-          .where({ id })
-          .del()
-          .returning("id");
-
-      if (!deletedTokenData.length)
-        return false;
-      
-      return true;
     } catch (error) {
-        console.log(`Error in delete user(): ${ error }`);
+        console.log(`Error in update user(): ${ error }`);
         throw error;
     }
   }
