@@ -7,4 +7,5 @@ export interface IUserRepository {
   exists(id: string): Promise<boolean>;
   emailExists(email: string): Promise<boolean>;
   findUserById(id: string): Promise<User>;
+  saveUserRefreshToken(id: string, refreshToken: string): Promise<any>;
 }

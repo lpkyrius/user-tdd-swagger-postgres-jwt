@@ -155,7 +155,9 @@ if (!e2eTestEnabled) {
                     .expect('Content-Type', /json/)
                     .expect(200);
 
+                // const accessToken = response.body.accessToken;
                 expect(response.body).toEqual({ message: 'success' });
+                expect(response.body).toHaveProperty('accessToken');
             });
 
             test('It should respond with 400 Bad Request + Content-Type = json.', async () => {

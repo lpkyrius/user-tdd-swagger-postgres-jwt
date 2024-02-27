@@ -4,6 +4,8 @@ class User {
     password!: string;
     role!: string;
     created_at?: Date;
+    refreshToken?: string;
+    accessToken?: string;
   
     private constructor({ email, password, role }: User) {
       return Object.assign(this, {

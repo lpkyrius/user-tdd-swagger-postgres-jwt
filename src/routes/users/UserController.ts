@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services/users/User.Service";
 import { UserRole } from "../../services/users/UserRole"
+import jwt from 'jsonwebtoken';
+import { User } from "../../entities/User";
+
+require('dotenv').config();
 
 const passwordMinSize = Number(process.env.PASSWORD_MIN_SIZE || 8);
 const passwordMaxSize = Number(process.env.PASSWORD_MAX_SIZE || 100);
@@ -36,8 +40,11 @@ class UserController {
       if (!this.checkPassword(password))
         return res.status(400).json({ error: `password should contain between ${ passwordMinSize } and ${ passwordMaxSize } characters` });
 
-      if (await this.userService.login({ email, password }))
-        return res.status(200).json({ message: 'success' });
+      const userLogin: User = await this.userService.login({ email, password });
+      if (userLogin.accessToken){
+        res.cookie('jwt', userLogin.refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
+        res.status(200).json(userLogin.accessToken);
+      }
 
       return res.status(400).json({ error: 'invalid login' });
     } catch (error: any) {

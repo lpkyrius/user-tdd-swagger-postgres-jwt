@@ -1,6 +1,9 @@
 import { User } from '../../entities/User';
 import { IUserRepository } from '../../repository/IUserRepository';
 import { Cryptography } from '../Cryptography/Cryptography.Service';
+import jwt from 'jsonwebtoken';
+
+require('dotenv').config();
 interface IAddUserRequest {
     email: string;
     password: string;
@@ -29,15 +32,31 @@ class UserService {
         return await this.userRepository.add({ email, password, role });
     }
 
-    async login({ email, password }: ILoginUserRequest) {
-        let loginSuccess: boolean = false;
+    async login({ email, password }: ILoginUserRequest): Promise<User> {
+        if (!email || !password)
+            throw new Error('invalid login data'); 
         const user = await this.userRepository.findUserByEmail(email)
-        if (user){
-            const crypto = new Cryptography();
-            loginSuccess = await crypto.decrypt(password, user.password);
+        const crypto = new Cryptography();
+        const accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET || '';
+        const refreshTokenSecret: string = process.env.REFRESH_TOKEN_SECRET || '';
+        const userId: string = user.id || '';
+        if(await crypto.decrypt(password, user.password)){
+            const accessToken = jwt.sign(
+                { user_id: user.id },
+                accessTokenSecret,
+                { expiresIn: '2h' }
+            );
+            const refreshToken = jwt.sign(
+                { user_id: user.id },
+                refreshTokenSecret,
+                { expiresIn: '1d' }
+            );
+            await this.userRepository.saveUserRefreshToken(userId, refreshToken);
+            user.accessToken = accessToken;
+            user.refreshToken = refreshToken;
         }
 
-        return loginSuccess;
+        return user;
     }
 
     async update(userToUpdate: User): Promise<User> {

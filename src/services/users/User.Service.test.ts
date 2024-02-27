@@ -97,17 +97,18 @@ describe('#UserService', () =>{
                 };
                 const result = await userService.login(userData);
 
-                expect(result).toBeTruthy();
+                expect(result.email).toEqual(userData.email);
+                expect(result).toHaveProperty('accessToken');
             })
             
             it('should NOT be able to log in with invalid password', async () => {
-                const noPasswordUser = {
+                const userInvalid = {
                     email: 'mary.tech@email.com',
                     password: ''
                 };
-                const result = await userService.login(noPasswordUser);
-
-                expect(result).toBeFalsy();
+                await expect(async () => {
+                    const loginIssue: User = await userService.login(userInvalid);
+                }).rejects.toThrow('invalid login data');
             })
 
             it('should throw an error when trying to log in with invalid user', async () => {
@@ -116,7 +117,7 @@ describe('#UserService', () =>{
                     password: 'mary.tech@123'
                 };
                 await expect(async () => {
-                    const loginIssue: boolean = await userService.login(userInvalid);
+                    const loginIssue: User = await userService.login(userInvalid);
                 }).rejects.toThrow('email not found');
             })
 
@@ -126,8 +127,8 @@ describe('#UserService', () =>{
                     password: ''
                 };
                 await expect(async () => {
-                    const loginIssue: boolean = await userService.login(userInvalid);
-                }).rejects.toThrow('email not found');
+                    const loginIssue: User = await userService.login(userInvalid);
+                }).rejects.toThrow('invalid login data');
             })
         })
 

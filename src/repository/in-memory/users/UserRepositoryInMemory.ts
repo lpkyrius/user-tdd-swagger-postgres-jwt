@@ -72,6 +72,15 @@ class UserRepositoryInMemory implements IUserRepository {
         throw new Error('id not found');
     }
 
+    async saveUserRefreshToken(id: string, refreshToken: string): Promise<any> {
+        return [
+            {
+                id: id, 
+                refreshToken: refreshToken
+            }
+        ];
+      }
+
     private readUsersFromFile(): User[] {
         const userFileData:User[] = JSON.parse(fs.readFileSync(this.userFilePath, 'utf-8'));
         const loginFileData:User[] = JSON.parse(fs.readFileSync(this.loginFilePath, 'utf-8'));

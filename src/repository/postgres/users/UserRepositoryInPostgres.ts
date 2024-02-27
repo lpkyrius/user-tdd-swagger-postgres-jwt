@@ -25,7 +25,11 @@ class UserRepositoryInPostgres implements IUserRepository {
                       created_at: newUser.created_at
                   }).returning('*').then((rows: User[]) => rows[0]);
 
-              await createdTransaction('login').insert({ id: crypto.randomUUID(), password: newUser.password, email: newUser.email });
+              await createdTransaction('login').insert({ 
+                id: crypto.randomUUID(), 
+                password: newUser.password, 
+                email: newUser.email 
+              });
 
               return insertedUser;
           });
@@ -126,6 +130,23 @@ class UserRepositoryInPostgres implements IUserRepository {
     }
   }
 
+  async saveUserRefreshToken(id: string, refreshToken: string): Promise<any> {
+    try {
+        const tokenData = await db('refresh_tokens')
+            .insert({
+                id: crypto.randomUUID(),
+                user_id: id,
+                refresh_token: refreshToken,
+                created_at: new Date(new Date().toISOString())
+            });
+
+        return tokenData;  
+              
+    } catch (error) {
+        console.log(`Error in saveCurrentUserRefreshToken(): ${error}`);
+        throw error;
+    }
+  }
 }
 
 export { UserRepositoryInPostgres };
