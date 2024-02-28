@@ -42,14 +42,24 @@ class UserController {
 
       const userLogin: User = await this.userService.login({ email, password });
       if (userLogin.accessToken){
+        const accessToken: string = userLogin.accessToken;
         res.cookie('jwt', userLogin.refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
-        res.status(200).json(userLogin.accessToken);
+
+        type UserWithoutSensitiveInfo = Omit<User, 'password' | 'accessToken' | 'refreshToken'>;
+        const user: UserWithoutSensitiveInfo = {
+          id: userLogin.id,
+          email: userLogin.email,
+          role: userLogin.role,
+          created_at: userLogin.created_at,
+        };
+        
+        return res.status(200).json({ accessToken, user }); 
       }
 
       return res.status(400).json({ error: 'invalid login' });
     } catch (error: any) {
-      console.error(`httpAddUser Error-> ${error}`);
-      res.status(500).json({error: 'error attempting to add an user'});
+      console.error(`httpLogin Error-> ${error}`);
+      res.status(500).json({error: 'error attempting to log in an user'});
     } 
   }
 

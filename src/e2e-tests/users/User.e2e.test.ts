@@ -9,8 +9,8 @@ const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-// global.console.log = jest.fn();
-// global.console.error = jest.fn();
+global.console.log = jest.fn();
+global.console.error = jest.fn();
 
 if (!e2eTestEnabled) {
     describe.skip('End-to-End Tests', () => {
@@ -144,7 +144,7 @@ if (!e2eTestEnabled) {
         })
 
         describe('Test POST /user/login', () => {
-            test.skip('It should respond with 200 success + Content-Type = json.', async () => {
+            test('It should respond with 200 success + Content-Type = json.', async () => {
                 const userData = {
                     email: 'mary.tech@email.com',
                     password: 'mary.tech@123'
@@ -155,13 +155,11 @@ if (!e2eTestEnabled) {
                     .expect('Content-Type', /json/)
                     .expect(200);
 
-                console.log('debug response.body', response.body)
-                // const accessToken = response.body.accessToken;
-                // expect(response.body).toEqual({ message: 'success' });
-                // expect(response.body).toHaveProperty('accessToken');
+                expect(response.body).toHaveProperty('accessToken');
+                const accessToken = response.body.accessToken;
             });
 
-            test.skip('It should respond with 400 Bad Request + Content-Type = json.', async () => {
+            test('It should respond with 400 Bad Request + Content-Type = json.', async () => {
                 const userData = {
                     email: 'mary.tech@email.com',
                     password: 'mary.tech@xyz'
@@ -175,7 +173,7 @@ if (!e2eTestEnabled) {
                 expect(response.body).toEqual({ error: 'invalid login' });
             });
 
-            test.skip('It should respond with 400 Bad Request + Content-Type = json.', async () => {
+            test('It should respond with 400 Bad Request + Content-Type = json.', async () => {
                 const passwordMinSize = Number(process.env.PASSWORD_MIN_SIZE || 8);
                 const passwordMaxSize = Number(process.env.PASSWORD_MAX_SIZE || 100);
                 const userData = {
@@ -241,16 +239,13 @@ if (!e2eTestEnabled) {
                     .expect(201);
         
                 const userToUpdate: User = response.body;
-                // console.log('debug userToUpdate before', userToUpdate)
                 userToUpdate.role = '1';
-                // console.log('debug userToUpdate after', userToUpdate)
                 const responseUpdate = await request(app)
                     .put('/user/update/'+ userToUpdate.id)
                     .send(userToUpdate)
                     .expect('Content-Type', /json/)
                     .expect(200);
-                console.log('debug responseUpdate.body.role', responseUpdate.body.role)
-                console.log('debug userToUpdate.role', userToUpdate.role)
+
             expect(responseUpdate.body.role).toEqual(userToUpdate.role);
             });
             
