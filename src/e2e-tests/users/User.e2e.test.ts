@@ -8,6 +8,8 @@ import { dbInit, dbClose } from './../../services/postgres/postgres';
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
 
+let accessToken: string = '';
+
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
 global.console.log = jest.fn();
@@ -29,8 +31,6 @@ if (!e2eTestEnabled) {
         afterAll(async () => {
             await dbClose();
         });
-
-        let accessToken: string = '';
 
         describe('Test POST /user/add', () => {
             test('It should respond with 200 success + Content-Type = json.', async () => {
@@ -214,6 +214,7 @@ if (!e2eTestEnabled) {
 
                 const responseFind = await request(app)
                     .get('/user/find/'+ response.body.id)
+                    .set('Authorization', 'bearer ' + accessToken)
                     .expect('Content-Type', /json/)
                     .expect(200);
                 
@@ -225,7 +226,8 @@ if (!e2eTestEnabled) {
         
                 const responseFind = await request(app)
                     .get('/user/find/this.id.should.not.exist')
-                    .expect('Content-Type', /json/)
+                    .set('Authorization', 'bearer ' + accessToken)
+                    // .expect('Content-Type', /json/)
                     .expect(404);
         
                     expect(responseFind.body).toEqual({ error: 'user not found' });
@@ -315,6 +317,39 @@ if (!e2eTestEnabled) {
                     .set('Authorization', 'bearer ' + accessToken)
                     .send(userData)
                     .expect(404);
+
+                    expect(responseUpdate.body).toEqual({ });
+              });
+
+              test('It should respond with 403 when trying to update with invalid token.', async () => {
+                const userData: User = {
+                    id: 'this.id.does.not.exist',
+                    email: 'to.not.update.test.tech@email.com',
+                    password: 'to.not.update.test.tech@123',
+                    role: '2'
+                };
+                
+                const responseUpdate = await request(app)
+                    .put('/user/update/' + userData.id)
+                    .set('Authorization', 'bearer any.random.value')
+                    .send(userData)
+                    .expect(403);
+
+                    expect(responseUpdate.body).toEqual({ });
+              });
+
+              test('It should respond with 401 when trying to update with no token.', async () => {
+                const userData: User = {
+                    id: 'this.id.does.not.exist',
+                    email: 'to.not.update.test.tech@email.com',
+                    password: 'to.not.update.test.tech@123',
+                    role: '2'
+                };
+                
+                const responseUpdate = await request(app)
+                    .put('/user/update/' + userData.id)
+                    .send(userData)
+                    .expect(401);
 
                     expect(responseUpdate.body).toEqual({ });
               });
