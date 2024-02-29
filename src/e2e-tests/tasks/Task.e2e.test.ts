@@ -4,14 +4,16 @@ import app from '../../app';
 import { Task } from '../../entities/Task';
 import { ManageTaskTestFile } from '../../repository/in-memory/tasks/ManageTaskTestFile';
 import { dbInit, dbClose } from './../../services/postgres/postgres';
+import { User } from '../../entities/User';
 
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
+let accessToken: string = '';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-global.console.log = jest.fn();
-global.console.error = jest.fn();
+// global.console.log = jest.fn();
+// global.console.error = jest.fn();
 
 if (!e2eTestEnabled) {
   describe.skip('End-to-End Tests', () => {
@@ -24,6 +26,28 @@ if (!e2eTestEnabled) {
     beforeAll(async () => {
       await dbInit();
       manageTaskTestFile.resetFile();
+
+      // To have the token for tests:
+      const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
+      const userData: User = {
+          email: `success.test.adm.${ randomString }@email.com`,
+          password: `success.test.adm.${ randomString }@123`,
+          role: '1'
+      };
+      const responseAdd = await request(app)
+          .post('/user/add')
+          .send(userData)
+          .expect('Content-Type', /json/)
+          .expect(201);
+
+      const response = await request(app)
+          .post('/user/login')
+          .send(userData)
+          .expect('Content-Type', /json/)
+          .expect(200);
+
+      accessToken = response.body.accessToken;
+      console.log('debug accessToken 1:', accessToken)
     });
 
     afterAll(async () => {
@@ -31,6 +55,8 @@ if (!e2eTestEnabled) {
     });
 
     describe('Test POST /task/add', () => {
+
+      console.log('debug accessToken 2:', accessToken)
       test('It should respond with 200 success + Content-Type = json.', async () => {
         const taskData = {
           userId: '533b7681-b1c3-4244-8a37-423ae7a3d8ac',

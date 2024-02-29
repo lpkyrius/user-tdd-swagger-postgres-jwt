@@ -7,7 +7,6 @@ import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
-
 let accessToken: string = '';
 
 // Mock console.log and console.error globally for the entire test suite
@@ -153,10 +152,18 @@ if (!e2eTestEnabled) {
 
         describe('Test POST /user/login', () => {
             test('It should respond with 200 success + Content-Type = json.', async () => {
-                const userData = {
-                    email: 'mary.tech@email.com',
-                    password: 'mary.tech@123'
+                const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
+                const userData: User = {
+                    email: `success.test.tech.${ randomString }@email.com`,
+                    password: `success.test.tech.${ randomString }@123`,
+                    role: '2'
                 };
+                const responseAdd = await request(app)
+                    .post('/user/add')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(201);
+
                 const response = await request(app)
                     .post('/user/login')
                     .send(userData)
