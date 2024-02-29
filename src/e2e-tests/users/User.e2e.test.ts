@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../app';
 import { User } from '../../entities/User';
 import { ManageUserTestFile } from '../../repository/in-memory/users/ManageUserTestFile';
+import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
@@ -20,9 +21,16 @@ if (!e2eTestEnabled) {
     describe('#E2E tests for users.', () => {
         const manageUserTestFile = new ManageUserTestFile();
 
-        beforeAll(() => {
+        beforeAll(async () => {
+            await dbInit();
             manageUserTestFile.resetFile();
         });
+
+        afterAll(async () => {
+            await dbClose();
+        });
+
+        let accessToken: string = '';
 
         describe('Test POST /user/add', () => {
             test('It should respond with 200 success + Content-Type = json.', async () => {
@@ -156,7 +164,7 @@ if (!e2eTestEnabled) {
                     .expect(200);
 
                 expect(response.body).toHaveProperty('accessToken');
-                const accessToken = response.body.accessToken;
+                accessToken = response.body.accessToken;
             });
 
             test('It should respond with 400 Bad Request + Content-Type = json.', async () => {
@@ -215,12 +223,12 @@ if (!e2eTestEnabled) {
         
               test('It should respond with 404 not found when trying to find an id that does not exist.', async () => {
         
-                const responseUpdate = await request(app)
+                const responseFind = await request(app)
                     .get('/user/find/this.id.should.not.exist')
                     .expect('Content-Type', /json/)
                     .expect(404);
         
-                    expect(responseUpdate.body).toEqual({ error: 'user not found' });
+                    expect(responseFind.body).toEqual({ error: 'user not found' });
               });
         })
 
@@ -242,6 +250,7 @@ if (!e2eTestEnabled) {
                 userToUpdate.role = '1';
                 const responseUpdate = await request(app)
                     .put('/user/update/'+ userToUpdate.id)
+                    .set('Authorization', 'bearer ' + accessToken)
                     .send(userToUpdate)
                     .expect('Content-Type', /json/)
                     .expect(200);
@@ -267,6 +276,7 @@ if (!e2eTestEnabled) {
                 
                 const responseUpdate = await request(app)
                     .put('/user/update/'+ userToUpdate.id)
+                    .set('Authorization', 'bearer ' + accessToken)
                     .send(userToUpdate)
                     .expect('Content-Type', /json/)
                     .expect(400);
@@ -284,6 +294,7 @@ if (!e2eTestEnabled) {
                 
                 const responseUpdate = await request(app)
                     .put('/user/update/'+ userData.id)
+                    .set('Authorization', 'bearer ' + accessToken)
                     .send(userData)
                     .expect('Content-Type', /json/)
                     .expect(404);
@@ -301,6 +312,7 @@ if (!e2eTestEnabled) {
                 
                 const responseUpdate = await request(app)
                     .put('/user/update/')
+                    .set('Authorization', 'bearer ' + accessToken)
                     .send(userData)
                     .expect(404);
 

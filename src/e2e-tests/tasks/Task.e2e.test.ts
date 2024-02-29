@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../app';
 import { Task } from '../../entities/Task';
 import { ManageTaskTestFile } from '../../repository/in-memory/tasks/ManageTaskTestFile';
+import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
@@ -20,8 +21,13 @@ if (!e2eTestEnabled) {
   describe('#E2E tests for tasks.', () => {
     const manageTaskTestFile = new ManageTaskTestFile();
 
-    beforeAll(() => {
+    beforeAll(async () => {
+      await dbInit();
       manageTaskTestFile.resetFile();
+    });
+
+    afterAll(async () => {
+        await dbClose();
     });
 
     describe('Test POST /task/add', () => {
