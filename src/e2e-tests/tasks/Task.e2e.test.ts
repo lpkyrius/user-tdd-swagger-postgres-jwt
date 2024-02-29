@@ -27,7 +27,7 @@ if (!e2eTestEnabled) {
       await dbInit();
       manageTaskTestFile.resetFile();
 
-      // To have the token for tests:
+      // To have the token for tests: (>>> TRY TO MOVE TO A FUNCTION)
       const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
       const userData: User = {
           email: `success.test.adm.${ randomString }@email.com`,
