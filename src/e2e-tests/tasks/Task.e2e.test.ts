@@ -8,12 +8,32 @@ import { User } from '../../entities/User';
 
 require('dotenv').config();
 const e2eTestEnabled: boolean = ((process.env.ENABLE_E2E_TESTS || 'Y') === 'Y')
-let accessToken: string = '';
+const randomLoggedString = (Math.floor((Math.random() * 1000000) + 1)).toString();
+const loggedUserData: User = {
+  email: `success.test.adm.${ randomLoggedString }@email.com`,
+  password: `success.test.adm.${ randomLoggedString }@123`,
+  role: '1',
+}; 
 
+const loginUser = async () => {
+  const responseAdd = await request(app)
+      .post('/user/add')
+      .send(loggedUserData)
+      .expect('Content-Type', /json/)
+      .expect(201);
+
+  const response = await request(app)
+      .post('/user/login')
+      .send(loggedUserData)
+      .expect('Content-Type', /json/)
+      .expect(200);
+
+  return response.body.accessToken;
+}
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-// global.console.log = jest.fn();
-// global.console.error = jest.fn();
+global.console.log = jest.fn();
+global.console.error = jest.fn();
 
 if (!e2eTestEnabled) {
   describe.skip('End-to-End Tests', () => {
@@ -25,29 +45,8 @@ if (!e2eTestEnabled) {
 
     beforeAll(async () => {
       await dbInit();
+      loggedUserData.accessToken = await loginUser();
       manageTaskTestFile.resetFile();
-
-      // To have the token for tests: (>>> TRY TO MOVE TO A FUNCTION)
-      const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
-      const userData: User = {
-          email: `success.test.adm.${ randomString }@email.com`,
-          password: `success.test.adm.${ randomString }@123`,
-          role: '1'
-      };
-      const responseAdd = await request(app)
-          .post('/user/add')
-          .send(userData)
-          .expect('Content-Type', /json/)
-          .expect(201);
-
-      const response = await request(app)
-          .post('/user/login')
-          .send(userData)
-          .expect('Content-Type', /json/)
-          .expect(200);
-
-      accessToken = response.body.accessToken;
-      console.log('debug accessToken 1:', accessToken)
     });
 
     afterAll(async () => {
@@ -56,7 +55,7 @@ if (!e2eTestEnabled) {
 
     describe('Test POST /task/add', () => {
 
-      console.log('debug accessToken 2:', accessToken)
+      
       test('It should respond with 200 success + Content-Type = json.', async () => {
         const taskData = {
           userId: '533b7681-b1c3-4244-8a37-423ae7a3d8ac',
@@ -65,6 +64,7 @@ if (!e2eTestEnabled) {
         
         const response = await request(app)
           .post('/task/add')
+          .set('Authorization', 'bearer ' + loggedUserData.accessToken)
           .send(taskData)
           .expect('Content-Type', /json/)
           .expect(201);
@@ -74,7 +74,6 @@ if (!e2eTestEnabled) {
       });
 
       test('It should respond with 400 bad request + Content-Type = json for bad formatted userId.', async () => {
-
         const taskData = {
           userId: '533b7681-b1c3-4244-8a37-',
           summary: 'E2E Test summary #2 error',
@@ -82,6 +81,7 @@ if (!e2eTestEnabled) {
         
         const response = await request(app)
           .post('/task/add')
+          .set('Authorization', 'bearer ' + loggedUserData.accessToken)
           .send(taskData)
           .expect('Content-Type', /json/)
           .expect(400);
@@ -90,7 +90,6 @@ if (!e2eTestEnabled) {
       });
 
       test('It should respond with 400 bad request + Content-Type = json for bad formatted summary.', async () => {
-
         const taskData = {
           userId: '533b7681-b1c3-4244-8a37-423ae7a3d8ac',
           summary: '',
@@ -98,6 +97,7 @@ if (!e2eTestEnabled) {
         
         const response = await request(app)
           .post('/task/add')
+          .set('Authorization', 'bearer ' + loggedUserData.accessToken)
           .send(taskData)
           .expect('Content-Type', /json/)
           .expect(400);
@@ -106,11 +106,11 @@ if (!e2eTestEnabled) {
       });
 
       test('It should respond with 400 bad request + Content-Type = json for bad formatted task.', async () => {
-
         const taskData = {};
         
         const response = await request(app)
           .post('/task/add')
+          .set('Authorization', 'bearer ' + loggedUserData.accessToken)
           .send(taskData)
           .expect('Content-Type', /json/)
           .expect(400);
