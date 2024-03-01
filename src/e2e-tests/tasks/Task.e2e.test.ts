@@ -138,6 +138,7 @@ if (!e2eTestEnabled) {
         
         const response = await request(app)
             .get('/task/list')
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .expect('Content-Type', /json/)
             .expect(200);
             
@@ -151,6 +152,7 @@ if (!e2eTestEnabled) {
       test('It should respond with 200 success + Content-Type = json containing a Task like object.', async () => {
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
 
@@ -181,6 +183,7 @@ if (!e2eTestEnabled) {
       test('It should respond with 200 success + Content-Type = json with the updated task.', async () => {
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
 
@@ -201,6 +204,7 @@ if (!e2eTestEnabled) {
         const repeatedSummary = 'A';
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
 
@@ -219,6 +223,7 @@ if (!e2eTestEnabled) {
       test('It should respond with 404 when trying to update with a id that does not exist.', async () => {
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
         
@@ -241,6 +246,7 @@ if (!e2eTestEnabled) {
       test('It should respond with 200 success + Content-Type = json deleting a task.', async () => {
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
 
@@ -257,6 +263,7 @@ if (!e2eTestEnabled) {
       test('It should respond with 404 + Content-Type = json when trying to delete a task that does not exist.', async () => {
         const response = await request(app)
               .get('/task/list')
+              .set('Authorization', 'bearer ' + loggedUserData.accessToken)
               .expect('Content-Type', /json/)
               .expect(200);
 
