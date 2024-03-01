@@ -192,6 +192,7 @@ if (!e2eTestEnabled) {
 
         const responseUpdate = await request(app)
             .put('/task/update/'+ testTask.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .send(testTask)
             .expect('Content-Type', /json/)
             .expect(200);
@@ -213,6 +214,7 @@ if (!e2eTestEnabled) {
 
         const responseUpdate = await request(app)
             .put('/task/update/'+ testTask.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .send(testTask)
             .expect('Content-Type', /json/)
             .expect(400);
@@ -233,6 +235,7 @@ if (!e2eTestEnabled) {
         const responseUpdate = await request(app)
 
             .put('/task/update/'+ testTask.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .send(testTask)
             .expect('Content-Type', /json/)
             .expect(404);
