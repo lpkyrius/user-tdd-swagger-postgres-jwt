@@ -143,13 +143,6 @@ const userLogin = {
             }
         ]
     },
-    // securitySchemes: {
-    //     bearerAuth: {
-    //         type: 'http',
-    //         scheme: 'bearer',
-    //         bearerFormat: 'JWT'
-    //     }
-    // }
 };
 
 // userRouter.get ('/user/find/:id', ...
@@ -178,13 +171,6 @@ const usersByIdSchema = {
             }
         ]
     },
-    // securitySchemes: {
-    //     bearerAuth: {
-    //         type: 'http',
-    //         scheme: 'bearer',
-    //         bearerFormat: 'JWT'
-    //     }
-    // }
 };
 
 // userRouter.put ('/user/update/:id', ...
@@ -234,13 +220,6 @@ const userUpdateSchema = {
             }
         ]
     },
-    // securitySchemes: {
-    //     bearerAuth: {
-    //         type: 'http',
-    //         scheme: 'bearer',
-    //         bearerFormat: 'JWT'
-    //     }
-    // }
 };
 
 export const userRouteDoc = {

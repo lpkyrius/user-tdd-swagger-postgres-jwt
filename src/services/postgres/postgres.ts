@@ -38,7 +38,6 @@ async function dbInit(): Promise<void> {
 async function dbClose(): Promise<void> {
     try {
         console.log(`Closing ( ${ pool.totalCount } ) database connection pools...`);
-        
         await pool.end();
         console.log('Database connection pool closed successfully.');
     } catch (error) {
