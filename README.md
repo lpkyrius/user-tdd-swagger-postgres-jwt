@@ -73,3 +73,7 @@ _This seeding will create 1 manager, 2 technicians and 2 tasks_
 _The password for the 3 users created will be each email user (until the @) + 123. For example, john.manager@123 will be the password for the manager john.manager@email.com_
 run the seed command:
 ```knex seed:run --knexfile ./db/knexfile.cjs```
+
+7. Run ```npm run start-nodemon``` and ```npm t```
+
+![alt text](image.png)
