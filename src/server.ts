@@ -21,6 +21,10 @@ async function startServer() {
         console.log(`\nDocs JSON available @ ${process.env.SERVER_ADDRESS}:${PORT}/api-docs.json`);
         console.log(`\nGood to go!`);
     });
+
+    // Handle termination signals
+    process.on('SIGINT', gracefulShutdown);
+    process.on('SIGTERM', gracefulShutdown);
 }
 
 async function gracefulShutdown() {

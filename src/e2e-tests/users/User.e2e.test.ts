@@ -28,7 +28,7 @@ if (!e2eTestEnabled) {
         });
 
         afterAll(async () => {
-            await dbClose();
+            // await dbClose();
         });
 
         describe('Test POST /user/add', () => {

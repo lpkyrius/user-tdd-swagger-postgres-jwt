@@ -3,6 +3,9 @@ SELECT * FROM users usr;
 SELECT * FROM login lg;
 SELECT * FROM refresh_tokens rt;   
 
+SELECT COUNT(*) as tasks FROM maintenance_task mt;
+SELECT COUNT(*) as users FROM users usr;
+
 SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = 'maintenance_tasks')
 
 ----------------------------------------------------------------------------
@@ -67,3 +70,6 @@ FROM
 -- </ Clear tests >
 ----------------------------------------------------------------------------
 
+-- Connections:
+-- select * FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND pid < 62
+-- SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND pid < 62
