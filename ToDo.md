@@ -21,8 +21,9 @@
 - [ ] Integrate Users authentication (JWT) for Tasks management;
     - [x] VerifyJWT middleware
     - [x] New structure for user + login data (persist token)
+    - [x] Update Routes
+    - [x] Update Swagger Docs
     - [ ] Refresh token management
-    - [ ] Update Routes
 
 
 ##### Next phase
