@@ -29,7 +29,7 @@ class TaskRepositoryInPostgres implements ITaskRepository {
     try {
       const { summary } = task
       const updatedUser = await db('maintenance_task')
-        .where('id', '=', task.id)
+        .where({ 'id': task.id })
         .update({
             summary
           })

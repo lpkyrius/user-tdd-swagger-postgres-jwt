@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { UserService } from "../../services/users/User.Service";
-import { UserRole } from "../../services/users/UserRole"
-import jwt from 'jsonwebtoken';
+import { UserRole } from "../../services/users/UserRole";
 import { User } from "../../entities/User";
 
 require('dotenv').config();
@@ -62,7 +61,7 @@ class UserController {
         return res.status(400).json({ error: 'invalid login' });
 
       console.error(`httpLogin Error-> ${error}`);
-      res.status(500).json({error: 'error attempting to log in an user'});
+      res.status(500).json({error: 'error attempting to log in an ur'});
     } 
   }
 

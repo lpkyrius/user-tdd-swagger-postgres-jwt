@@ -63,7 +63,7 @@ class UserRepositoryInPostgres implements IUserRepository {
     try {
       const { role } = user
       const updatedUser = await db('users')
-        .where('id', '=', user.id)
+        .where({ 'id': user.id })
         .update({
             role
           })

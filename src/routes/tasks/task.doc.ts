@@ -127,13 +127,13 @@ const taskListSchema = {
             }
         ]
     },
-    securitySchemes: {
-        bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT'
-        }
-    }
+    // securitySchemes: {
+    //     bearerAuth: {
+    //         type: 'http',
+    //         scheme: 'bearer',
+    //         bearerFormat: 'JWT'
+    //     }
+    // }
 };
 
 // tasksRouter.get   ('/task/find/:id', ...
@@ -162,13 +162,13 @@ const usersByIdSchema = {
             }
         ]
     },
-    securitySchemes: {
-        bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT'
-        }
-    }
+    // securitySchemes: {
+    //     bearerAuth: {
+    //         type: 'http',
+    //         scheme: 'bearer',
+    //         bearerFormat: 'JWT'
+    //     }
+    // }
 };
 
 // tasksRouter.put   ('/task/update/:id', ...
@@ -218,13 +218,13 @@ const taskUpdateSchema = {
             }
         ]
     },
-    securitySchemes: {
-        bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT'
-        }
-    }
+    // securitySchemes: {
+    //     bearerAuth: {
+    //         type: 'http',
+    //         scheme: 'bearer',
+    //         bearerFormat: 'JWT'
+    //     }
+    // }
 };
 
 // tasksRouter.delete('/task/delete/:id', async (req: Request, res: Response) => await (await taskFactory()).httpDeleteTask(req, res));
@@ -254,13 +254,13 @@ const taskDeleteSchema = {
             }
         ]
     },
-    securitySchemes: {
-        bearerAuth: {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT'
-        }
-    }
+    // securitySchemes: {
+    //     bearerAuth: {
+    //         type: 'http',
+    //         scheme: 'bearer',
+    //         bearerFormat: 'JWT'
+    //     }
+    // }
 };
 
 export const taskRouteDoc = {
