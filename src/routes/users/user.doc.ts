@@ -136,7 +136,19 @@ const userLogin = {
             200: return200,
             400: return400,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -159,7 +171,19 @@ const usersByIdSchema = {
             200: return200,
             404: return404,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -203,7 +227,19 @@ const userUpdateSchema = {
             200: return200,
             404: return404,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
