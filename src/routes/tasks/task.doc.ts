@@ -95,7 +95,19 @@ const taskAddSchema = {
         responses:{
             201: return201,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -108,7 +120,19 @@ const taskListSchema = {
         responses:{
             200: return200,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -131,7 +155,19 @@ const usersByIdSchema = {
             200: return200,
             404: return404,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -175,7 +211,19 @@ const taskUpdateSchema = {
             200: return200,
             404: return404,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 
@@ -199,7 +247,19 @@ const taskDeleteSchema = {
             400: return400,
             404: return404,
             500: return500,
-        } 
+        },
+        security: [
+            {
+                bearerAuth: []
+            }
+        ]
+    },
+    securitySchemes: {
+        bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT'
+        }
     }
 };
 

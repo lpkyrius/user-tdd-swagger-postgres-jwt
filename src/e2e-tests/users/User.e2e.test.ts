@@ -11,8 +11,8 @@ let accessToken: string = '';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
-// global.console.log = jest.fn();
-// global.console.error = jest.fn();
+global.console.log = jest.fn();
+global.console.error = jest.fn();
 
 if (!e2eTestEnabled) {
     describe.skip('End-to-End Tests', () => {

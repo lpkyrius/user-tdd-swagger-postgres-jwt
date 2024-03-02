@@ -35,12 +35,12 @@ const options: swaggerJsdoc.Options = {
         },
         tags: [
             {
-                name: "Task",
-                description: "Task routes"
+                name: 'Task',
+                description: 'Task routes'
             },
             {
-                name: "User",
-                description: "User routes"
+                name: 'User',
+                description: 'User routes'
             }
         ],
         paths: { ...taskRouteDoc, ...userRouteDoc }

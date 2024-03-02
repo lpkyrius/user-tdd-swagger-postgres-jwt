@@ -55,9 +55,12 @@ class UserController {
         
         return res.status(200).json({ accessToken, user }); 
       }
-
+      
       return res.status(400).json({ error: 'invalid login' });
     } catch (error: any) {
+      if (error.message.includes('not found')) 
+        return res.status(400).json({ error: 'invalid login' });
+
       console.error(`httpLogin Error-> ${error}`);
       res.status(500).json({error: 'error attempting to log in an user'});
     } 
