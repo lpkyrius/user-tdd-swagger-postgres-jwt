@@ -160,6 +160,7 @@ if (!e2eTestEnabled) {
         
         const responseFind = await request(app)
             .get('/task/find/'+ testTask.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .expect('Content-Type', /json/)
             .expect(200);
           
@@ -171,6 +172,7 @@ if (!e2eTestEnabled) {
 
         const responseUpdate = await request(app)
             .get('/task/find/this.id.should.not.exist')
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .expect('Content-Type', /json/)
             .expect(404);
 

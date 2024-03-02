@@ -16,6 +16,7 @@ class TaskRepositoryInPostgres implements ITaskRepository {
             created_at: newTask.created_at 
           })
           .returning('*');
+          // .releaseConnection();
           
       return savedTask[0];  
             
@@ -34,6 +35,7 @@ class TaskRepositoryInPostgres implements ITaskRepository {
             summary
           })
         .returning('*');
+        
       
       if (!updatedUser.length)
         throw new Error('task not found');
