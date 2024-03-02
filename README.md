@@ -76,4 +76,4 @@ run the seed command:
 
 7. Run ```npm run start-nodemon``` and ```npm t```
 
-![alt text](image.png)
+![alt text](./src/images/readme.console.image.png)
