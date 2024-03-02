@@ -257,6 +257,7 @@ if (!e2eTestEnabled) {
 
         const responseDelete = await request(app)
             .delete('/task/delete/'+ taskToDelete.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .expect('Content-Type', /json/)
             .expect(200);
             
@@ -275,6 +276,7 @@ if (!e2eTestEnabled) {
 
         const responseDelete = await request(app)
             .delete('/task/delete/'+ taskToDelete.id)
+            .set('Authorization', 'bearer ' + loggedUserData.accessToken)
             .expect('Content-Type', /json/)
             .expect(404);
 
