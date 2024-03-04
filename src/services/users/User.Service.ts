@@ -1,5 +1,6 @@
 import { User } from '../../entities/User';
 import { IUserRepository } from '../../repository/IUserRepository';
+import { IRefreshToken } from '../../repository/IRefreshToken';
 import { Cryptography } from '../Cryptography/Cryptography.Service';
 import jwt from 'jsonwebtoken';
 
@@ -65,6 +66,31 @@ class UserService {
 
     async findById(id: string): Promise<User> {
         return await this.userRepository.findUserById(id);
+    }
+
+    async handleRefreshToken(refreshToken:string): Promise<string> {
+        let accessToken: string = '';
+        const tokenData: IRefreshToken = await this.userRepository.getCurrentUserRefreshToken(refreshToken);
+        if (!tokenData)
+            return ''
+
+        const accessTokenSecret: string = process.env.ACCESS_TOKEN_SECRET || '';
+        const refreshTokenSecret: string = process.env.REFRESH_TOKEN_SECRET || '';
+        jwt.verify(
+            refreshToken,
+            refreshTokenSecret,
+            (err, decoded) => {
+                if (err) return ''; // Forbidden
+
+                accessToken = jwt.sign(
+                    { "user_id": tokenData.user_id },
+                    accessTokenSecret,
+                    { expiresIn: '15m' }
+                );
+            }
+        );
+
+        return accessToken;
     }
 
 }

@@ -24,6 +24,7 @@
     - [x] Update Routes
     - [x] Update Swagger Docs
     - [ ] Refresh token management
+    - [ ] Logout
 
 
 ##### Next phase

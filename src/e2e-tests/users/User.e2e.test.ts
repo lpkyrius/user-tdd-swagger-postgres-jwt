@@ -362,5 +362,54 @@ if (!e2eTestEnabled) {
               });
         })
 
+        describe.skip('Test GET /user/refresh', () => {
+            test('It should respond with 200 success + Content-Type = json.', async () => {
+                const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
+                const userData: User = {
+                    email: `success.test.tech.${ randomString }@email.com`,
+                    password: `success.test.tech.${ randomString }@123`,
+                    role: '2'
+                };
+                const responseAdd = await request(app)
+                    .post('/user/add')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(201);
+
+                const responseLogin = await request(app)
+                    .post('/user/login')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(200);
+
+                accessToken = responseLogin.body.accessToken;
+                // console.log('debug responseLogin.body.accessToken', responseLogin.body.accessToken)
+                const response = await request(app)
+                    .get('/user/refresh')
+                    .set('Authorization', 'bearer ' + accessToken)
+                    .expect('Content-Type', /json/)
+                    // .expect(200);
+
+                console.log('debug response.body', response.body)
+                expect(response.body).toHaveProperty('accessToken');
+                
+            });
+
+            test.skip('It should respond with 400 Bad Request + Content-Type = json.', async () => {
+                const userData = {
+                    email: 'mary.tech@email.com',
+                    password: 'mary.tech@xyz'
+                };
+                const response = await request(app)
+                    .post('/user/login')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(400);
+
+                expect(response.body).toEqual({ error: 'invalid login' });
+            });
+
+        })
+
     })
 }

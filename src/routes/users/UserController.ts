@@ -65,6 +65,28 @@ class UserController {
     } 
   }
 
+  async httpRefreshToken(req: Request, res: Response) {
+    try {
+        // const cookies = req.cookies;
+        // console.log('debug cookies', cookies)
+        // if (!cookies?.jwt) return res.status(401).json({ error: 'Unauthorized.'});
+        const authHeader = req.headers['authorization']
+        if (!authHeader) 
+          return res.status(401).json({ error: 'Unauthorized.'});
+
+        const refreshToken = authHeader.split(' ')[1];
+        // console.log('debug controller refreshToken', refreshToken)
+        // const refreshToken = cookies.jwt;
+        const accessToken: string = await this.userService.handleRefreshToken(refreshToken) || ''; 
+        if (!accessToken) return res.status(403).json({ error: 'Forbidden.'});
+
+        res.json({ accessToken });
+    } catch (error) {
+        console.error(`handleRefreshToken Error-> ${error}`);
+        res.status(500).json({ error: 'error during handleRefreshToken attempt' });
+    }
+  }
+
   async httpFindUserById(req: Request, res: Response) {
     try {
       const id = req.params.id;

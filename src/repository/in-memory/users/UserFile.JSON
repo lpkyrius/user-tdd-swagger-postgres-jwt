@@ -1,1 +1,44 @@
-[{"id":"533b7681-b1c3-4244-8a37-423ae7a3d8ac","email":"john.manager@email.com","role":"1","created_at":"2023-12-24T16:17:18.622Z"},{"id":"943b7681-b1c3-4244-8a37-423ae7a3d7bc","email":"mary.tech@email.com","role":"2","created_at":"2024-01-30T11:32:34.690Z"}]
+[
+  {
+    "id": "533b7681-b1c3-4244-8a37-423ae7a3d8ac",
+    "email": "john.manager@email.com",
+    "role": "1",
+    "created_at": "2023-12-24T16:17:18.622Z",
+    "password": "$2a$10$Vyu.KpCEqyiRQV1iiJLD4OBuYd598E9kFUDo.HDwZfQTaixyR1MSK"
+  },
+  {
+    "id": "943b7681-b1c3-4244-8a37-423ae7a3d7bc",
+    "email": "mary.tech@email.com",
+    "role": "2",
+    "created_at": "2024-01-30T11:32:34.690Z",
+    "password": "$2a$10$ivVPqg7qdwZpUG6Ad566/.VpbPhCADQl3fEH8eHIlHPU.OdgwywSm"
+  },
+  {
+    "id": "a9944890-e219-49eb-af62-513ddb06a7d1",
+    "email": "exist.tech.935133@email.com",
+    "role": "2",
+    "created_at": "2024-03-04T18:39:48.515Z",
+    "password": ""
+  },
+  {
+    "id": "c5046f6d-62b8-4916-bc34-da73a7c100b9",
+    "email": "peter.tech.74756@email.com",
+    "role": "2",
+    "created_at": "2024-03-04T18:39:48.591Z",
+    "password": ""
+  },
+  {
+    "id": "04055c54-e9d3-4458-8073-58892bf5ba3a",
+    "email": "user.to.find.manager.867692@email.com",
+    "role": "1",
+    "created_at": "2024-03-04T18:39:48.751Z",
+    "password": ""
+  },
+  {
+    "email": "user.to.update.manager.373273@email.com",
+    "password": "$2a$10$K/hpxM7AbUKPB3w87hJ6reyZ095ru1RdxR4JOjb8ytlCkL5hmlLvK",
+    "role": "2",
+    "id": "4999eab5-7438-48e4-8c06-7258f187fab5",
+    "created_at": "2024-03-04T18:39:48.828Z"
+  }
+]

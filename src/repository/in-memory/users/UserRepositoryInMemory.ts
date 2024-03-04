@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import * as fs from 'fs';
 import { User } from '../../../entities/User';
 import { IUserRepository } from '../../IUserRepository';
+import { IRefreshToken } from '../../IRefreshToken';
 import { ManageUserTestFile } from './ManageUserTestFile';
 import { ManageLoginTestFile } from './ManageLoginTestFile';
 class UserRepositoryInMemory implements IUserRepository {
@@ -79,7 +80,22 @@ class UserRepositoryInMemory implements IUserRepository {
                 refreshToken: refreshToken
             }
         ];
-      }
+    }
+
+    async getCurrentUserRefreshToken(refreshToken: string): Promise<IRefreshToken> {
+        let refreshTokenFound: IRefreshToken;
+        const tokens = this.readUsersFromFile();
+        const index = tokens.findIndex((usr) => usr.refreshToken === refreshToken);
+        if (index !== -1) {
+            refreshTokenFound = {
+                id: tokens[index].id || '',
+                user_id: tokens[index].id || '',
+                refresh_token: tokens[index].refreshToken || '',
+            };
+        }
+        
+        throw new Error('refresh token not found');
+    }
 
     private readUsersFromFile(): User[] {
         const userFileData:User[] = JSON.parse(fs.readFileSync(this.userFilePath, 'utf-8'));

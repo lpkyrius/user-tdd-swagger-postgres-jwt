@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import { User } from '../../../entities/User';
-import { IUserRepository } from "../../IUserRepository";
+import { IUserRepository } from '../../IUserRepository';
+import { IRefreshToken } from '..//../IRefreshToken';
 import { db } from '../../../services/postgres/postgres';
-import { QueryBuilder } from 'knex';
 import { ManageUserTestFile } from '../../in-memory/users/ManageUserTestFile';
 
 class UserRepositoryInPostgres implements IUserRepository {
@@ -145,6 +145,23 @@ class UserRepositoryInPostgres implements IUserRepository {
     } catch (error) {
         console.log(`Error in saveCurrentUserRefreshToken(): ${error}`);
         throw error;
+    }
+  }
+
+  async getCurrentUserRefreshToken(refreshToken: string): Promise<IRefreshToken> {
+    try {
+      
+        const tokenData = await db('refresh_tokens')
+        .select('*').from('refresh_tokens')
+            .where({' refresh_token': refreshToken });
+
+        if (tokenData.length)
+              return tokenData[0];
+
+        throw new Error('refresh token not found');
+    } catch (error) {
+        console.log(`Error in getCurrentUserRefreshToken(): ${ error }`);
+        throw new Error('refresh token not found');
     }
   }
 }
