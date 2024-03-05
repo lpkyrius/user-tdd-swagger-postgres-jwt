@@ -73,6 +73,7 @@ class UserRepositoryInMemory implements IUserRepository {
         throw new Error('id not found');
     }
 
+    // for now, refresh token management will be only hard code tests
     async saveUserRefreshToken(id: string, refreshToken: string): Promise<any> {
         return [
             {
@@ -82,6 +83,7 @@ class UserRepositoryInMemory implements IUserRepository {
         ];
     }
 
+    // for now, refresh token management will be only hard code tests
     async getCurrentUserRefreshToken(refreshToken: string): Promise<IRefreshToken> {
         let refreshTokenFound: IRefreshToken;
         const tokens = this.readUsersFromFile();
@@ -97,6 +99,7 @@ class UserRepositoryInMemory implements IUserRepository {
         throw new Error('refresh token not found');
     }
 
+    // for now, refresh token management will be only hard code tests
     async deleteRefreshToken(refreshToken: string): Promise<boolean> {
         return true;
     }
