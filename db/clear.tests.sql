@@ -71,5 +71,5 @@ FROM
 ----------------------------------------------------------------------------
 
 -- Connections:
--- select * FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND pid < 62
--- SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND pid < 62
+-- select * FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND application_name = ''
+-- SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = 'maintenance_tasks' AND application_name = ''
