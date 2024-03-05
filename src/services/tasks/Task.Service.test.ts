@@ -4,7 +4,7 @@ import { ITaskRepository } from '../../repository/ITaskRepository';
 import { TaskService } from './TaskService';
 import { TasksRepositoryInMemory } from '../../repository/in-memory/tasks/TaskRepositoryInMemory';
 import { TaskRepositoryInPostgres } from '../../repository/postgres/tasks/TaskRepositoryInPostgres';
-import { dbInit, dbClose } from './../../services/postgres/postgres';
+import { dbInit, dbClose } from '../postgres/postgres';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
