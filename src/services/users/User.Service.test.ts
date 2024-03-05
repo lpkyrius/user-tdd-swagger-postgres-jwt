@@ -4,6 +4,7 @@ import { IUserRepository } from '../../repository/IUserRepository';
 import { UserService } from './User.Service';
 import { UserRepositoryInMemory } from '../../repository/in-memory/users/UserRepositoryInMemory';
 import { UserRepositoryInPostgres } from '../../repository/postgres/users/UserRepositoryInPostgres';
+import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
@@ -33,13 +34,18 @@ describe('#UserService', () =>{
         ]);
 
         // run tests twice, on for InMemory and one for Postgres
-        beforeAll(() => {
+        beforeAll(async () => {
         if (repositories[property] == 'InMemory'){
             usersRepository = new UserRepositoryInMemory();
         } else {
+            await dbInit();
             usersRepository = new UserRepositoryInPostgres();
         }
         userService = new UserService(usersRepository);
+        });
+
+        afterAll(async () => {
+            await dbClose();
         });
         
         describe('#UserExist', () => {

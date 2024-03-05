@@ -2,6 +2,7 @@ import { expect, describe, jest, test, beforeAll } from '@jest/globals';
 import { TasksRepositoryInMemory } from './tasks/TaskRepositoryInMemory';
 import { TaskRepositoryInPostgres } from '../postgres/tasks/TaskRepositoryInPostgres';
 import { ITaskRepository } from '../ITaskRepository';
+import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
@@ -22,12 +23,15 @@ describe('#taskService', () => {
       let tasksRepository: ITaskRepository;
 
         // run tests twice, on for InMemory and one for Postgres
-        beforeAll(() => {
+        beforeAll(async () => {
           if (repositories[property] == 'InMemory'){
             tasksRepository = new TasksRepositoryInMemory();
           } else {
             tasksRepository = new TaskRepositoryInPostgres();
           }
+        });
+        afterAll(async () => {
+          await dbClose();
         });
 
         describe('#Find Task by Id', () => {

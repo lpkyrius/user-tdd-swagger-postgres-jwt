@@ -4,6 +4,7 @@ import { ITaskRepository } from '../../repository/ITaskRepository';
 import { TaskService } from './TaskService';
 import { TasksRepositoryInMemory } from '../../repository/in-memory/tasks/TaskRepositoryInMemory';
 import { TaskRepositoryInPostgres } from '../../repository/postgres/tasks/TaskRepositoryInPostgres';
+import { dbInit, dbClose } from './../../services/postgres/postgres';
 
 // Mock console.log and console.error globally for the entire test suite
 // So we keep a clear console when tests should return error 
@@ -25,13 +26,18 @@ describe('#taskService', () => {
     let taskService: TaskService;
 
     // run tests twice, on for InMemory and one for Postgres
-    beforeAll(() => {
+    beforeAll(async () => {
       if (repositories[property] == 'InMemory'){
         tasksRepository = new TasksRepositoryInMemory();
       } else {
+        await dbInit();
         tasksRepository = new TaskRepositoryInPostgres();
       }
       taskService = new TaskService(tasksRepository);
+    });
+
+    afterAll(async () => {
+      await dbClose();
     });
 
     describe('#Task exists', () => {
