@@ -362,7 +362,7 @@ if (!e2eTestEnabled) {
               });
         })
 
-        describe.skip('Test GET /user/refresh', () => {
+        describe('Test GET /user/refresh', () => {
             test('It should respond with 200 success + Content-Type = json.', async () => {
                 const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
                 const userData: User = {
@@ -382,33 +382,22 @@ if (!e2eTestEnabled) {
                     .expect('Content-Type', /json/)
                     .expect(200);
 
-                accessToken = responseLogin.body.accessToken;
-                // console.log('debug responseLogin.body.accessToken', responseLogin.body.accessToken)
-                const response = await request(app)
-                    .get('/user/refresh')
-                    .set('Authorization', 'bearer ' + accessToken)
-                    .expect('Content-Type', /json/)
-                    // .expect(200);
+                const setCookieHeader = responseLogin.headers['set-cookie'][0];
+                const jwtCookie = setCookieHeader.split(';')[0]; 
+                const refreshToken = jwtCookie.split('=')[1]; 
 
-                console.log('debug response.body', response.body)
+                accessToken = responseLogin.body.accessToken;
+                    
+                const response = await request(app)
+                    .post('/user/refresh')
+                    .set('Authorization', 'bearer ' + accessToken)
+                    .set('Refresh-Token', refreshToken)
+                    .expect('Content-Type', /json/)
+                    .expect(200);
+
                 expect(response.body).toHaveProperty('accessToken');
                 
             });
-
-            test.skip('It should respond with 400 Bad Request + Content-Type = json.', async () => {
-                const userData = {
-                    email: 'mary.tech@email.com',
-                    password: 'mary.tech@xyz'
-                };
-                const response = await request(app)
-                    .post('/user/login')
-                    .send(userData)
-                    .expect('Content-Type', /json/)
-                    .expect(400);
-
-                expect(response.body).toEqual({ error: 'invalid login' });
-            });
-
         })
 
     })

@@ -42,8 +42,6 @@ class UserController {
       const userLogin: User = await this.userService.login({ email, password });
       if (userLogin.accessToken){
         const accessToken: string = userLogin.accessToken;
-        res.cookie('jwt', userLogin.refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
-
         type UserWithoutSensitiveInfo = Omit<User, 'password' | 'accessToken' | 'refreshToken'>;
         const user: UserWithoutSensitiveInfo = {
           id: userLogin.id,
@@ -51,7 +49,8 @@ class UserController {
           role: userLogin.role,
           created_at: userLogin.created_at,
         };
-        
+        res.cookie('jwt', userLogin.refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
+
         return res.status(200).json({ accessToken, user }); 
       }
       
@@ -67,20 +66,15 @@ class UserController {
 
   async httpRefreshToken(req: Request, res: Response) {
     try {
-        // const cookies = req.cookies;
-        // console.log('debug cookies', cookies)
-        // if (!cookies?.jwt) return res.status(401).json({ error: 'Unauthorized.'});
-        const authHeader = req.headers['authorization']
-        if (!authHeader) 
-          return res.status(401).json({ error: 'Unauthorized.'});
+      const refreshToken = req.headers['refresh-token']?.toString();
+      if (!refreshToken) 
+        return res.status(401).json({ error: 'Unauthorized.'});
 
-        const refreshToken = authHeader.split(' ')[1];
-        // console.log('debug controller refreshToken', refreshToken)
-        // const refreshToken = cookies.jwt;
-        const accessToken: string = await this.userService.handleRefreshToken(refreshToken) || ''; 
-        if (!accessToken) return res.status(403).json({ error: 'Forbidden.'});
+      const accessToken: string = await this.userService.handleRefreshToken(refreshToken) || ''; 
+      if (!accessToken) 
+        return res.status(403).json({ error: 'Forbidden.'});
 
-        res.json({ accessToken });
+      res.json({ accessToken });
     } catch (error) {
         console.error(`handleRefreshToken Error-> ${error}`);
         res.status(500).json({ error: 'error during handleRefreshToken attempt' });
