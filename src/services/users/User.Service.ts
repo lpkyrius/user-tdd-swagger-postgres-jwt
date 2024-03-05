@@ -93,6 +93,10 @@ class UserService {
         return accessToken;
     }
 
+    async handleDeleteRefreshToken(refreshToken:string): Promise<boolean> {
+        return await this.userRepository.deleteRefreshToken(refreshToken);
+    }
+
 }
 
 export { UserService };

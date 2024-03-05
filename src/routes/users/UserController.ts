@@ -81,6 +81,24 @@ class UserController {
     }
   }
 
+  async handleLogout(req: Request, res: Response) {
+    try {
+      const refreshToken = req.headers['refresh-token']?.toString();
+      if (!refreshToken)
+        return res.status(401).json({ error: 'Unauthorized.'});
+
+      this.userService.handleDeleteRefreshToken(refreshToken); 
+      
+      // res.clearCookie('jwt', { httpOnly: true, secure: true }); // option only for production where we use https
+      res.clearCookie('jwt', { httpOnly: true });
+      res.status(204).json({ message: 'Successful. No content'});
+      
+    } catch (error) {
+        console.error(`Error-> ${error}`);
+        res.status(500).json({ error: 'error during handleLogout attempt' });
+    }
+  }
+
   async httpFindUserById(req: Request, res: Response) {
     try {
       const id = req.params.id;

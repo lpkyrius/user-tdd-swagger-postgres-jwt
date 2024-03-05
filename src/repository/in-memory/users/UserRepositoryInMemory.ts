@@ -97,6 +97,10 @@ class UserRepositoryInMemory implements IUserRepository {
         throw new Error('refresh token not found');
     }
 
+    async deleteRefreshToken(refreshToken: string): Promise<boolean> {
+        return true;
+    }
+
     private readUsersFromFile(): User[] {
         const userFileData:User[] = JSON.parse(fs.readFileSync(this.userFilePath, 'utf-8'));
         const loginFileData:User[] = JSON.parse(fs.readFileSync(this.loginFilePath, 'utf-8'));

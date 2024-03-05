@@ -49,7 +49,6 @@ class TaskRepositoryInPostgres implements ITaskRepository {
 
   async delete(id: string): Promise<boolean> {
     try {
-
       const deletedTokenData = await db('maintenance_task')
           .where({ id })
           .del()

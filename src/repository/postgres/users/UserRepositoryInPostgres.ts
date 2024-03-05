@@ -150,10 +150,10 @@ class UserRepositoryInPostgres implements IUserRepository {
 
   async getCurrentUserRefreshToken(refreshToken: string): Promise<IRefreshToken> {
     try {
-      
         const tokenData = await db('refresh_tokens')
-        .select('*').from('refresh_tokens')
-            .where({' refresh_token': refreshToken });
+          .select('*')
+          .from('refresh_tokens')
+          .where({' refresh_token': refreshToken });
 
         if (tokenData.length)
               return tokenData[0];
@@ -164,6 +164,25 @@ class UserRepositoryInPostgres implements IUserRepository {
         throw new Error('refresh token not found');
     }
   }
+
+  async deleteRefreshToken(refreshToken: string): Promise<boolean> {
+    try {
+      const deletedTokenData = await db('refresh_tokens')
+        .where({' refresh_token': refreshToken })
+        .del()
+        .returning("id");
+  
+      if (!deletedTokenData.length)
+        return false;
+  
+      return true;
+  
+    } catch (error) {
+        console.log(`Error in deleteRefreshToken(): ${ error }`);
+        throw new Error('refresh token not found');
+    }
+  }
+  
 }
 
 export { UserRepositoryInPostgres };

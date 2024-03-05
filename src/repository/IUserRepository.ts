@@ -9,4 +9,5 @@ export interface IUserRepository {
   findUserById(id: string): Promise<User>;
   saveUserRefreshToken(id: string, refreshToken: string): Promise<any>;
   getCurrentUserRefreshToken(refreshToken:string): Promise<IRefreshToken>;
+  deleteRefreshToken(refreshToken: string): Promise<boolean>;
 }

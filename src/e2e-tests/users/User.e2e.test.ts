@@ -400,5 +400,40 @@ if (!e2eTestEnabled) {
             });
         })
 
+        describe('Test GET /user/logout', () => {
+            test('It should respond with 200 success + Content-Type = json.', async () => {
+                const randomString = (Math.floor((Math.random() * 1000000) + 1)).toString();
+                const userData: User = {
+                    email: `success.test.tech.${ randomString }@email.com`,
+                    password: `success.test.tech.${ randomString }@123`,
+                    role: '2'
+                };
+                const responseAdd = await request(app)
+                    .post('/user/add')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(201);
+
+                const responseLogin = await request(app)
+                    .post('/user/login')
+                    .send(userData)
+                    .expect('Content-Type', /json/)
+                    .expect(200);
+
+                const setCookieHeader = responseLogin.headers['set-cookie'][0];
+                const jwtCookie = setCookieHeader.split(';')[0]; 
+                const refreshToken = jwtCookie.split('=')[1]; 
+
+                accessToken = responseLogin.body.accessToken;
+                    
+                const response = await request(app)
+                    .post('/user/logout')
+                    .set('Authorization', 'bearer ' + accessToken)
+                    .set('Refresh-Token', refreshToken)
+                    .expect(204);
+
+            });
+        })
+
     })
 }

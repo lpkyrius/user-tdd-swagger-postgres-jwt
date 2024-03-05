@@ -23,7 +23,7 @@
     - [x] New structure for user + login data (persist token)
     - [x] Update Routes
     - [x] Update Swagger Docs
-    - [ ] Refresh token management
+    - [x] Refresh token management
     - [ ] Logout
 
 
